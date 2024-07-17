@@ -46,6 +46,9 @@ const noLimit = async (strapi, queryString, parameters, limit = 5000) => {
       for (const item of itemObj) {
         let { parameter, dynamic_parameter } = item?.route_parameters[0];
         const slugParameter = parameter;
+        if (!dynamic_parameter?.sitemapQuery || !dynamic_parameter?.sitemapTransform) {
+          continue;
+        }
 
         let result = null;
         const sitemapQuery = dynamic_parameter?.sitemapQuery.replace('$locale', `"${item?.locale}"`)
