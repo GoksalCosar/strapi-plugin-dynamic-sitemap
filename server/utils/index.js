@@ -58,7 +58,6 @@ const noLimit = async (strapi, queryString, parameters, limit = 5000) => {
           });
         } catch (error) {
           console.log("error", error);
-          continue;
         }
         const resp = new Function(dynamic_parameter?.sitemapTransform)(
             result?.data
