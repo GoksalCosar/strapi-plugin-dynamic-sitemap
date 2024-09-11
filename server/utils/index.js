@@ -12,6 +12,21 @@ const getService = (name) => {
 
 const logMessage = (msg = "") => `[strapi-plugin-sitemap]: ${msg}`;
 
+const replaceRegexWithSlug = (route, slug) => {
+  const tokens = parse(route);
+  const dynamicToken = tokens.find((token) => typeof token === "object");
+
+  if (!dynamicToken) {
+    return;
+  }
+
+  const paramName = dynamicToken.name;
+  const toPath = compile(route);
+  const resultUrl = toPath({ [paramName]: slug });
+
+  return resultUrl;
+};
+
 const noLimit = async (strapi, queryString, parameters, limit = 5000) => {
   const amountOfEntries = await strapi.entityService.count(
     queryString,
@@ -66,7 +81,7 @@ const noLimit = async (strapi, queryString, parameters, limit = 5000) => {
         resp.map((slug) => {
           formatedChunk.push({
             id: item?.id,
-            route: item?.route.replace(":" + slugParameter, slug),
+            route: replaceRegexWithSlug(item?.route, slug),
             createdAt: item?.createdAt,
             updatedAt: item?.updatedAt,
             publishedAt: item?.publishedAt,
