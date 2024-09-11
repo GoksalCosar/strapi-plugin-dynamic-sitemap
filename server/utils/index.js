@@ -1,6 +1,7 @@
 "use strict";
 
 const axios = require("axios").default;
+const { compile, parse } = require("path-to-regexp");
 
 const getCoreStore = () => {
   return strapi.store({ type: "plugin", name: "sitemap" });
